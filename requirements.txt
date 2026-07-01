@@ -1,0 +1,15 @@
+numpy>=1.26           
+pandas>=2.1            
+orjson>=3.9           
+python-docx>=1.1      
+pyyaml>=6.0            
+torch>=2.4            
+sentence-transformers>=3.0  
+scikit-learn>=1.4     
+pyarrow>=15.0         
+tqdm>=4.66             
+ollama>=0.4          
+pydantic>=2.6        
+tenacity>=8.2          
+scikit-learn>=1.4    
+
