@@ -1,0 +1,27 @@
+# virtualenv
+.h2s/
+
+# python cruft
+__pycache__/
+*.pyc
+
+# the challenge dataset (465 MB candidates.jsonl + docx bundle + __MACOSX junk) —
+# graders already have it; place it at ./dataset/ per README
+dataset/
+
+# the two large passage-embedding matrices (196 MB each — exceed GitHub's 100 MB cap).
+# Regenerate with: python src/build_embeddings.py  (see README "Full offline reproduction")
+artifacts/emb_bge.npy
+artifacts/emb_e5.npy
+
+# rank.py reproduce output (byte-identical to the tracked team_h2s_redrob.csv)
+submission/ranking.csv
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+
+# scratch
+*.tmp
+scratch/
+scratchpad/

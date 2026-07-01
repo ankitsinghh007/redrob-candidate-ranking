@@ -1,15 +1,55 @@
-numpy>=1.26           
-pandas>=2.1            
-orjson>=3.9           
-python-docx>=1.1      
-pyyaml>=6.0            
-torch>=2.4            
-sentence-transformers>=3.0  
-scikit-learn>=1.4     
-pyarrow>=15.0         
-tqdm>=4.66             
-ollama>=0.4          
-pydantic>=2.6        
-tenacity>=8.2          
-scikit-learn>=1.4    
+# Redrob Candidate Ranking — dependencies (living file)
+# Versions are PINNED to the exact environment the submission was produced with
+# (Windows 11, Python 3.12.10). Keep ranking-time (rank.py) deps minimal and CPU-only;
+# heavier deps below are OFFLINE-PREPROCESS-ONLY (allowed by spec line:
+# "pre-computation may exceed the 5-minute window").
 
+# --- RANK-TIME (the only deps rank.py needs; CPU-only, no network) ---
+numpy==2.5.0           # vectors, numeric features, scoring math
+pandas==3.0.3          # feature tables, submission CSV assembly
+pyarrow==24.0.0        # parquet reader for artifacts/*.parquet
+orjson==3.11.9         # fast JSONL parsing of the 100k-line candidates file (build_features)
+
+# --- bundle/doc + config parsing (Stage A tooling, not rank.py) ---
+python-docx==1.2.0     # read the .docx spec/JD/signals docs programmatically
+PyYAML==6.0.3          # read/write submission_metadata.yaml
+
+# ===========================================================================
+# BUILD-TIME ONLY (offline preprocessing; NOT needed at rank time)
+# These run during the Stage-B embedding/feature build. They are heavy and
+# GPU-bound and must NOT be imported by rank.py (rank.py = CPU-only, no network,
+# loads precomputed artifacts/*.parquet + frozen_rerank_order.json only).
+# ===========================================================================
+# torch: MUST be the CUDA wheel on this Windows + RTX 4060 Ti box, NOT the default
+#   CPU-only wheel. Install with an explicit CUDA index, e.g.:
+#     pip install torch --index-url https://download.pytorch.org/whl/cu124
+#   (use the current cuXXX wheel matching the driver; cu121/cu124 both work on
+#   driver 581.57). Verify torch.cuda.is_available() is True before embedding.
+torch==2.6.0+cu124     # GPU tensor backend for the embedding models (CUDA build!)
+sentence-transformers==5.6.0  # BAAI/bge-large-en-v1.5 + intfloat/e5-large-v2 encoders
+scikit-learn==1.9.0    # cosine/normalize utilities, eval metric helpers
+tqdm==4.68.3           # progress bars during the 100k embedding build
+
+# ===========================================================================
+# JUDGE-TIME ONLY (offline, GPU; LLM-as-recruiter pass over the shortlist)
+# Runs during offline preprocessing, NOT at rank time. The judge talks to a
+# LOCAL Ollama server (Qwen2.5-7B-Instruct q5_K_M) — no hosted API, no network
+# egress. rank.py consumes the judge's precomputed scores, never these libs.
+# ===========================================================================
+ollama==0.6.2          # python client for the local Ollama server (judge inference)
+pydantic==2.13.4       # strict JSON schema validation of judge output
+tenacity==9.1.4        # retry wrapper for transient judge parse/IO failures
+
+# ===========================================================================
+# EVAL-TIME ONLY (offline metric/ablation harness; does NOT touch rank.py)
+# Measures the ranking against an INDEPENDENT hand-labeled gold set. All deps
+# here are already installed above; listed for clarity of the eval boundary.
+# ===========================================================================
+# scikit-learn — ndcg_score / metric cross-checks in eval/metrics.py (pinned above)
+# numpy, pandas — already present in the rank-time section above
+
+# ===========================================================================
+# PACKAGING ONLY (submission deliverables; not part of the pipeline)
+# ===========================================================================
+openpyxl==3.1.5        # write the XLSX copy of the submission CSV
+psutil==7.2.2          # measure rank.py peak memory for the README compute note

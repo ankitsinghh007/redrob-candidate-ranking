@@ -1,0 +1,4 @@
+# Preserve bytes exactly on every platform — the submission CSV is byte-frozen
+# (md5 d21e098092d73a4a51aaac7910a4c160, LF newlines) and must not be CRLF-converted
+# by autocrlf on Windows clones.
+* -text

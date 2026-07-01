@@ -15,7 +15,9 @@ from __future__ import annotations
 import os, sys, json, re, time
 import numpy as np
 import pandas as pd
-import ollama
+# NOTE: ollama is imported LAZILY inside rerank_window() only. The frozen deterministic
+# path (frozen_rerank_order.json present) never touches it, so the rank-time environment
+# does not need the judge-time ollama dependency.
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -83,6 +85,7 @@ def _ke_short(ke_json, n=3, cap=320):
 
 def rerank_window(cands, temperature=0.1):
     """cands: list of dicts {label,title,yoe,fit_score,tier,ke}. Returns ordered list of labels."""
+    import ollama  # judge-time-only dep; never reached on the frozen deterministic path
     lines = []
     for c in cands:
         lines.append(f"[{c['label']}] title={c['title']} | yoe={c['yoe']} | "
