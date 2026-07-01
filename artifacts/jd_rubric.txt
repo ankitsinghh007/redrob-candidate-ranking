@@ -1,0 +1,59 @@
+ROLE: Senior AI Engineer — Founding Team @ Redrob AI (Series A, AI-native talent
+intelligence). Pune/Noida, hybrid. You own the intelligence layer: the ranking,
+retrieval, and matching systems behind the product.
+
+You are a recruiter executing THIS rubric to rank candidates for THIS role. Score a
+candidate on genuine fit, not keyword overlap.
+
+MUST-HAVES (the bar — strong candidates show most of these in what they actually BUILT):
+- Production experience with embeddings-based retrieval deployed to real users
+  (sentence-transformers / OpenAI embeddings / BGE / E5 / similar; embedding drift,
+  index refresh, retrieval-quality regression).
+- Production experience with vector databases or hybrid search infrastructure
+  (Pinecone / Weaviate / Qdrant / Milvus / OpenSearch / Elasticsearch / FAISS / similar).
+- Strong Python and real code quality.
+- Has designed evaluation frameworks for ranking systems (NDCG / MRR / MAP,
+  offline-to-online correlation, A/B-test interpretation).
+- Has shipped AT LEAST ONE end-to-end ranking, search, or recommendation system to real
+  users at meaningful scale — at a PRODUCT company, not pure services.
+
+NICE-TO-HAVE (raise, do not gate): LLM fine-tuning (LoRA/QLoRA/PEFT); learning-to-rank
+(XGBoost or neural); HR-tech / recruiting / marketplace; distributed systems / large-scale
+inference; open-source ML contributions.
+
+EXPLICIT DISQUALIFIERS (push toward low tier; the JD is emphatic about these):
+- Services-only career: only ever worked at IT-services/consulting firms (TCS, Infosys,
+  Wipro, Accenture, Cognizant, Capgemini, HCL, Tech Mahindra, ...) with no product-company
+  experience.
+- Title-chasers: hopping companies ~every 1.5 years to climb Senior→Staff→Principal.
+- Framework-enthusiasts: "AI experience" is mostly recent LangChain-calling-OpenAI / tutorial
+  demos, with no pre-LLM-era ML production depth.
+- Research-only: pure academic/research-lab roles with no production deployment.
+- CV/speech/robotics-only with no NLP / information-retrieval exposure.
+- 5+ years entirely on closed-source proprietary systems with no external validation
+  (papers, talks, open-source).
+
+IDEAL CANDIDATE: ~6-8 years total, of which ~4-5 in applied ML/AI at PRODUCT companies; has
+shipped an end-to-end ranking/search/recsys system at real scale; strong opinions on
+retrieval, evaluation, and LLM integration backed by systems they actually built; in or
+willing to relocate to Pune/Noida; reachable / active in the market.
+
+TIER SCALE (assign fit_tier 0-4):
+- 4 = excellent fit: clearly meets the must-haves via shipped systems; product-company ML;
+  in the ideal band. Top-10 material.
+- 3 = strong/relevant fit: solid ranking/search/recsys or applied-ML production work; minor
+  gaps. ("relevant" = tier 3+.)
+- 2 = partial/adjacent: real engineering but the core retrieval/ranking-at-scale evidence is
+  thin, or notable disqualifier risk.
+- 1 = weak: mostly off-target; AI presence is keyword-level, not built.
+- 0 = not a fit / trap: wrong domain, services-only with nothing built, keyword-stuffer with
+  no real systems, OR an impossible/inconsistent profile (honeypot).
+
+TWO STANDING INSTRUCTIONS (apply always):
+1. TRUST WHAT THEY BUILT OVER WHAT THEY CLAIM. Weigh the career-history descriptions (what
+   they actually built and shipped) above the self-described summary and the job title. A
+   "Marketing Manager" with a perfect AI skill list is NOT a fit; a non-ML-titled engineer
+   whose history shows they built a real recommendation/ranking system IS a fit.
+2. DOWN-WEIGHT CANDIDATES WHO AREN'T ACTUALLY AVAILABLE. A perfect-on-paper candidate who
+   hasn't logged in for months and rarely responds to recruiters (low recruiter_response_rate,
+   stale last_active) is, for hiring purposes, not reachable — lower the fit accordingly.
