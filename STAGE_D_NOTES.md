@@ -3,7 +3,7 @@
 Status: **submission produced and PASSES `validate_submission.py` (exit 0).** Stopped for review
 before treating as final.
 
-Output: `submission/team_h2s_redrob.csv` (header `candidate_id,rank,score,reasoning`, 100 data rows).
+Output: `submission/ankitsingh058622_1300.csv` (header `candidate_id,rank,score,reasoning`, 100 data rows).
 Audit table: `artifacts/submission_audit.parquet`.
 
 ---
@@ -50,7 +50,7 @@ tier-3 above tier-4). Ranks 41–100 keep the `within_tier_score` order.
 
 ## Part 5 — validation
 ```
-$ python validate_submission.py submission/team_h2s_redrob.csv
+$ python validate_submission.py submission/ankitsingh058622_1300.csv
 Submission is valid.
 EXIT: 0
 ```
@@ -92,7 +92,8 @@ anchor + frame rotation.)
   temp 0) before declaring final.
 - **`fit_tier` only reaches 4** (no tier-0 survivors post-gate; no tier-0 was assigned anyway). Top-100
   spans tiers 4 and 3 only — consistent with a deep, capable pool.
-- **Participant ID placeholder:** filename `team_h2s_redrob.csv` — swap to the registered participant ID
+- **Participant ID placeholder:** filename was `team_h2s_redrob.csv` — since renamed to the registered
+  participant ID `ankitsingh058622_1300.csv` (spec §2)
   before actual upload (validator only requires a non-empty `.csv` stem).
 
 **Stage D complete — submission valid and ready for your review.**

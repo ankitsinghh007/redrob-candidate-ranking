@@ -102,7 +102,7 @@ artifacts/
   emb_bge.npy, emb_e5.npy    # NOT in git (196 MB each) — regenerate via src/build_embeddings.py
 eval/                        # independent gold set, metrics, ablations, traces (EVAL_RESULTS.md)
 submission/
-  team_h2s_redrob.csv        # the frozen submission (md5 d21e0980…)
+  ankitsingh058622_1300.csv  # the frozen submission, named per spec §2 (md5 d21e0980…)
   ankitsingh058622_1300_ranking.xlsx  # identical content, XLSX deliverable
 ```
 

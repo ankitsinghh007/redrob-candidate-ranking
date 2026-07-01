@@ -287,7 +287,8 @@ mean-rank aggregation rather than relying on a single sample.
   first (4 dropped, 0 tier-0, 0 survivors); tiered + blended `within_tier_score` (weights above);
   listwise windowed rerank of the top-40 tier-4 (3 passes, mean-rank, guards: no add/remove, no tier
   inversion); smooth 0.99→0.50 score; fact-led recruiter-note reasoning from judge `key_evidence` +
-  anchor + rotated frames (twin-collision 44→11). Wrote `submission/team_h2s_redrob.csv` —
+  anchor + rotated frames (twin-collision 44→11). Wrote `submission/ankitsingh058622_1300.csv` (named `team_h2s_redrob.csv` until the
+  registered-ID rename) —
   **`validate_submission.py` → "Submission is valid." (exit 0).** Top-100 = 47 tier-4 + 53 tier-3,
   0 honeypots, 100/100 distinct reasonings ≤240 chars. Audit in `artifacts/submission_audit.parquet`.
   Stopped for review before treating as final.

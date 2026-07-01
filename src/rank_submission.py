@@ -23,7 +23,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 ART = os.path.join(ROOT, "artifacts")
 SUBDIR = os.path.join(ROOT, "submission")
-PARTICIPANT_ID = "team_h2s_redrob"
+PARTICIPANT_ID = "ankitsingh058622_1300"   # registered participant ID (spec §2: filename = ID.csv)
 MODEL = "qwen2.5:7b-instruct-q5_K_M"
 
 # ---- explicit fusion weights (recorded in DECISIONS.md) ----

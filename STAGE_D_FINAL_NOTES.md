@@ -3,7 +3,7 @@
 Status: **audited and frozen. Submission valid. Stopped for your review before we call it final.**
 No ranking logic changed in this stage — verification + locking only.
 
-Artifacts: `submission/team_h2s_redrob.csv` (frozen), `artifacts/frozen_rerank_order.json`,
+Artifacts: `submission/ankitsingh058622_1300.csv` (frozen), `artifacts/frozen_rerank_order.json`,
 `artifacts/submission_audit.parquet`.
 
 ---
@@ -61,11 +61,12 @@ No other promotion/relegation issue surfaced.
 
 Final CSV regenerated from the frozen order:
 ```
-$ python validate_submission.py submission/team_h2s_redrob.csv
+$ python validate_submission.py submission/ankitsingh058622_1300.csv
 Submission is valid.
 EXIT: 0
 ```
-Filename kept as the placeholder `team_h2s_redrob.csv` (swap to the registered participant ID before
+Filename was the placeholder `team_h2s_redrob.csv`, since renamed to the registered participant ID
+`ankitsingh058622_1300.csv` (spec §2; validator only requires a non-empty `.csv` stem — original note: swap before
 upload — validator only requires a non-empty `.csv` stem).
 
 ### Final TOP-15
@@ -94,5 +95,5 @@ upload — validator only requires a non-empty `.csv` stem).
 ## For your review before we call it final
 1. **CAND_0092278** (rank 106): strong on paper (judge 0.85) but unavailable (235d idle, 7% response,
    not open). Down-weighted correctly per the JD — promote it or leave it? (Recommend: leave.)
-2. **Participant ID:** confirm the registered ID so we rename `team_h2s_redrob.csv` before upload.
+2. **Participant ID:** confirmed as `ankitsingh058622_1300` — file renamed accordingly (was `team_h2s_redrob.csv`).
 3. Otherwise: 0 honeypot risk, tier-consistent boundary, validator-clean, byte-reproducible.
