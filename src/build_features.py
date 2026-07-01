@@ -50,7 +50,11 @@ def main():
                 "role_tenure_gt_career": hp["role_tenure_gt_career"],
                 "career_months_gt_experience": hp["career_months_gt_experience"],
                 "career_date_error": hp["career_date_error"],
+                "yoe_gt_career_span": hp["yoe_gt_career_span"],
                 "soft_skill_duration_gt_career": hp["skill_duration_gt_career"],
+                "career_span_months": hp["career_span_months"],
+                "summary_years_stated": hp["summary_years_stated"],
+                "summary_contradicts_yoe": hp["summary_contradicts_yoe"],
                 "reason": hp["reason"],
                 "soft_reason": hp["soft_reason"],
             })

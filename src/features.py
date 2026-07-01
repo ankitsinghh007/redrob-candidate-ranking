@@ -75,6 +75,10 @@ _AI_ML_QUALIFIER_RE = re.compile(
     r"|\(\s*(?:ml|nlp|ai|gen\s?ai|llm|data\s?science|machine\s?learning)\s*\)",
     re.IGNORECASE)
 
+# First "<N> years" figure stated in profile.summary (informational corroboration for the
+# inflated-yoe honeypot check — the templated summaries state the true career span).
+_SUMMARY_YEARS_RE = re.compile(r"(\d+(?:\.\d+)?)\s*\+?\s*years?", re.IGNORECASE)
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -333,6 +337,12 @@ def honeypot_flags(candidate):
       - career_months_gt_experience: summed role months far exceed stated years_of_experience
       - career_date_error         : end<start, future start, or duration vs date mismatch,
                                      or >1 concurrent current role / heavy overlaps
+      - yoe_gt_career_span        : claimed years_of_experience exceeds the observed span from
+                                     the earliest career start_date to REFERENCE_DATE by >12 mo
+                                     (the INVERSE inflated-experience trap: e.g. yoe field 16.9
+                                     while the whole listed career spans 6.7 yrs; F1 audit found
+                                     25/100k, 21 corroborated by the candidate's own summary
+                                     stating the true span)
 
     SOFT / informational only (NOT gating — Stage-A measurement showed this fires on ~13% of
     the pool because the synthetic generator assigns skill durations independently of
@@ -428,6 +438,40 @@ def honeypot_flags(candidate):
             f"career months sum to {total_role_months} but total experience is "
             f"~{yoe_months:.0f} mo")
 
+    # --- inflated-experience check (F1): claimed yoe exceeds the OBSERVED career span ---
+    # Span = earliest role start_date -> REFERENCE_DATE (same pinned constant as every other
+    # date computation here; deterministic run-to-run). +12 mo tolerance for rounding/gaps.
+    yoe_gt_career_span = False
+    career_span_months = None
+    starts = [_parse_date(r.get("start_date")) for r in history]
+    starts = [s for s in starts if s]
+    if starts:
+        first = min(starts)
+        career_span_months = ((REFERENCE_DATE.year - first.year) * 12
+                              + (REFERENCE_DATE.month - first.month))
+        if yoe_months is not None and yoe_months > career_span_months + 12:
+            yoe_gt_career_span = True
+            reasons.append(
+                f"claims {yoe:g} yrs experience but entire listed career spans only "
+                f"~{career_span_months} mo (from {first})")
+
+    # Informational corroboration (NOT gating): years figure stated in the candidate's own
+    # summary. In the F1 honeypot family the summary states the TRUE span while the yoe field
+    # is inflated — a self-contradiction that corroborates the deterministic date math.
+    summary_years_stated = None
+    summary_contradicts_yoe = False
+    m = _SUMMARY_YEARS_RE.search((profile.get("summary") or ""))
+    if m:
+        try:
+            summary_years_stated = float(m.group(1))
+        except ValueError:
+            summary_years_stated = None
+    if (summary_years_stated is not None and isinstance(yoe, (int, float))
+            and abs(yoe - summary_years_stated) > 4):
+        summary_contradicts_yoe = True
+        soft_reasons.append(
+            f"summary states {summary_years_stated:g} yrs but profile field claims {yoe:g} yrs")
+
     # Gating checks (reliable, ~designed traps). skill_duration_gt_career is SOFT and excluded.
     gating = {
         "expert_zero_duration": expert_zero_duration,
@@ -435,10 +479,14 @@ def honeypot_flags(candidate):
         "role_tenure_gt_career": role_tenure_gt_career,
         "career_months_gt_experience": career_months_gt_experience,
         "career_date_error": career_date_error,
+        "yoe_gt_career_span": yoe_gt_career_span,
     }
     n_flags = sum(1 for v in gating.values() if v)
     checks = dict(gating)
     checks["skill_duration_gt_career"] = skill_duration_gt_career  # soft/informational
+    checks["career_span_months"] = career_span_months              # informational
+    checks["summary_years_stated"] = summary_years_stated          # informational
+    checks["summary_contradicts_yoe"] = summary_contradicts_yoe    # soft/informational
     checks["is_honeypot"] = n_flags > 0
     checks["n_flags"] = n_flags
     checks["reason"] = "; ".join(dict.fromkeys(reasons)) if reasons else ""
