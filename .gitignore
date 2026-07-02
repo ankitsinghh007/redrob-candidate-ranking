@@ -17,6 +17,9 @@ artifacts/emb_e5.npy
 # rank.py reproduce output (byte-identical to the tracked ankitsingh058622_1300.csv)
 submission/ranking.csv
 
+# Hugging Face Space (separate deploy — pushed to huggingface.co, NOT this GitHub repo)
+hf_space/
+
 # OS / editor junk
 .DS_Store
 Thumbs.db

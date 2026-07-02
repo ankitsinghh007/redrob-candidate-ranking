@@ -1,0 +1,106 @@
+# Redrob Hackathon — Submission Metadata
+#
+# Mirrors submission_metadata_template.yaml (same fields, order, nesting).
+# The fields here should match what is submitted via the portal at upload time.
+# Stage 3 review uses this file to verify portal metadata.
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "ankitsingh058622_1300"  # solo participant; team name = registered participant ID
+
+primary_contact:
+  name: "Ankit Kumar Singh"
+  email: "ankitsingh058622@gmail.com"        # Used for all organizer communication
+  phone: "7678188379"        # Used for top-50 / top-10 outreach
+
+team_members:
+  - name: "Ankit Singh"
+    email: "ankitsingh058622@gmail.com"
+    role: "Sole contributor"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/ankitsinghh007/redrob-candidate-ranking"
+# Required. Must be reachable. Private repos OK if you can grant organizer
+# access at Stage 3 (the email to add will be communicated then).
+
+sandbox_link: "https://huggingface.co/spaces/Ankitsingh007/redrob-candidate-ranking"
+# Required by spec §10.5 if the portal asks for it. See README "Reproduce the
+# submission" — the ranking step is a deterministic CPU-only artifact combiner.
+
+reproduce_command: "python rank.py --artifacts artifacts/ --out submission/ranking.csv"
+# Regenerates the frozen submission CSV byte-identically
+# (md5 d21e098092d73a4a51aaac7910a4c160). CPU-only, no network, ~0.1 s wall-clock
+# past interpreter startup (~0.5 s total), ~166 MB peak memory.
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Windows 11 desktop, NVIDIA RTX 4060 Ti 8GB (GPU used ONLY for offline pre-computation)"
+  cpu_cores: 16                                 # Number of CPU cores used
+  ram_gb: 32                                    # Available RAM in GB
+  python_version: "3.12.10"                     # python --version
+  os: "Windows 11 Pro (build 26200)"            # Or "Ubuntu 22.04 LTS", etc.
+  uses_gpu_for_inference: false                 # Must be false — ranking step is CPU-only
+  has_network_during_ranking: false             # Must be false — no API calls during ranking
+  pre_computation_required: true                # embeddings + local-LLM judge run offline (spec §10.3)
+  pre_computation_time_minutes: 170             # ~35 min BGE+E5 embeddings (100k) + ~132 min local
+                                                # Qwen2.5-7B judge (985 candidates) + ~3 min features/shortlist
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+# Transparency only — declared use is NOT penalized. Be honest. Stage 5 interview
+# may verify these declarations against your code; declarations that contradict
+# your code or your interview are flagged.
+ai_tools_used:
+  - "Redrob" 
+  - "Claude"  
+  - "ChatGPT"
+
+ai_usage_summary: |
+  Used Redrob to check the problem statement and create the initial solution design.
+  Used Claude as a development assistant throughout: architecture
+  discussion, code writing and review, data analysis, and documentation, with every
+  stage validated by measurement before proceeding (see DECISIONS.md and the
+  STAGE_*_NOTES.md logs in the repo). ChatGPT used for the cross verification and 
+  as an extra layer of checkup Separately, the ranking pipeline itself uses
+  local open-weight models as components: BGE-large-en-v1.5 and E5-large-v2 for
+  retrieval embeddings, and Qwen2.5-7B-Instruct via a local Ollama server as the
+  offline candidate-fit judge. No hosted LLM APIs were called by the pipeline and
+  no candidate data was sent to any external service; the ranking step that
+  produces the CSV uses no LLM at all (precomputed artifacts + a frozen
+  deterministic rerank order).
+
+# ============================================================================
+# Approach summary (optional but recommended)
+# ============================================================================
+methodology_summary: |
+  Ensemble dense retrieval (BGE-large + E5-large, positive-minus-negative JD
+  queries, RRF-fused) over free-text career evidence narrows 100k candidates to a
+  985-candidate shortlist (top-800 union "built a ranking/search/recsys system"
+  signal). The skills[] array is deliberately excluded as engineered noise —
+  evidence is what candidates actually built, per the JD. A local LLM judge
+  (Qwen2.5-7B via Ollama) scores each shortlisted candidate against a rubric
+  distilled verbatim from the JD, with verified precomputed facts. Final order:
+  judge tier first, then (0.70·judge + 0.30·structured_fit) × availability
+  multiplier, with the top-40 refined by a listwise rerank frozen at temperature 0
+  for byte-reproducibility. A deterministic 6-check consistency gate (impossible
+  tenures, expert-at-zero-use, inflated experience vs observed career span)
+  hard-removes ~69 fabricated honeypot profiles before ranking — measured
+  necessary because keyword-perfect honeypots fool both embeddings and the LLM
+  judge. Validated against an independent 47-candidate hand-labeled gold set
+  (composite 0.985 vs 0.806 embeddings-only). Ranking step: CPU-only, ~0.1 s.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true        # I have read submission_spec.md in full
+  code_is_original_work: true       # My code is my team's original work (using AI as a tool is fine)
+  no_collusion: true                # I have not coordinated my submission with other teams
+  honeypot_check_done: true         # OPTIONAL — we explicitly gate honeypots (6 deterministic checks; see AUDIT_F1_NOTES.md)
+  reproduction_tested: true         # reproduce_command tested end-to-end (byte-identical md5, 3x)
